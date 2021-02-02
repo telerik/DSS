@@ -1,5 +1,16 @@
-/node_modules/
-.DS_STORE
-.DS_Store?
-/examples/
-test.js
+# Folders
+.vscode/
+.tmp/
+node_modules/
+dist/
+modules/
+
+# Log files
+npm-debug.log
+debug.log
+
+# System files
+.DS_Store
+
+# Lock files
+package-lock.json
