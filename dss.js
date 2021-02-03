@@ -244,7 +244,7 @@ let dss = ( function() {
      * @return (Boolean) result of check
      */
         let singleLineComment = function( line ) {
-            return Boolean(line.match( /^\s*\/\// ));
+            return Boolean(line.match( /^\s*\/\/\// ));
         };
 
         /*
@@ -277,7 +277,7 @@ let dss = ( function() {
      * @return (Boolean) result of check
      */
         let parseSingleLine = function( line ) {
-            return line.replace( /\s*\/\//, '' );
+            return line.replace( /\s*\/\/\//, '' );
         };
 
         /*
