@@ -387,13 +387,20 @@ let dss = ( function() {
 
                 // multiline
                 if (lines.length <= 2) {
-                    line = dss.trim( line );
+                    line = _dss.trim(line);
                 }
 
                 if (line && line.indexOf(parserMarker) === -1) {
                     ret.push(line);
                 }
 
+                if (line.indexOf(parserMarker) !== -1) {
+                    line = _dss.trim(line.replace(parserMarker, ''));
+
+                    if (line.length > 0) {
+                        ret.push(line);
+                    }
+                }
             });
 
             return ret.join('\n');
@@ -422,8 +429,10 @@ dss.parser('name', (i, line, block, file) => { // eslint-disable-line no-unused-
 });
 
 // Describe parsing a description
-dss.parser('description', (i, line, block, file) => { // eslint-disable-line no-unused-vars
-    return line;
+dss.parser('description', (i, line, block, file, parserName) => {
+    const description = dss.getMultiLineContent(i, line, block, file, parserName);
+
+    return description;
 });
 
 // Describe parsing a state
@@ -439,7 +448,7 @@ dss.parser('state', (i, line, block, file) => { // eslint-disable-line no-unused
 
 // Describe parsing markup
 dss.parser('markup', (i, line, block, file, parserName) => {
-    let markup = dss.getMultiLineContent(i, line, block, file, parserName);
+    const markup = dss.getMultiLineContent(i, line, block, file, parserName);
 
     return {
         example: markup,

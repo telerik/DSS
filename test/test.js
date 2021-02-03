@@ -54,4 +54,15 @@ describe('Core tests', function() {
         });
     });
 
+    it('multiline description is correctly parsed', function() {
+        const file = fs.readFileSync(path.join(__dirname, 'data/multi-line-description.scss'), 'utf8');
+
+        dss.parse(file, {}, function(parsed) {
+            const data = parsed.blocks[0];
+
+            assert.strictEqual(data.name, 'Multi Line description');
+            assert.strictEqual(data.description, 'Your standard form button.\nsecond row test');
+        });
+    });
+
 });
