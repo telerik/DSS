@@ -65,4 +65,29 @@ describe('Core tests', function() {
         });
     });
 
+    it('should should parse all annotations', function() {
+        const file = fs.readFileSync(path.join(__dirname, 'data/all-annotations.scss'), 'utf8');
+
+        dss.parse(file, {}, function(parsed) {
+            const data = parsed.blocks[0];
+
+            assert.strictEqual(data.name, 'Button');
+            assert.strictEqual(data.description, 'Your standard form button.');
+            assert.strictEqual(data.state[0].name, ':hover');
+            assert.strictEqual(data.state[0].description, 'Highlights when hovering.');
+            assert.strictEqual(data.state[1].name, ':disabled');
+            assert.strictEqual(data.state[1].description, 'Dims the button when disabled.');
+            assert.strictEqual(data.state[2].name, '.primary');
+            assert.strictEqual(data.state[2].description, 'Indicates button is the primary action.');
+            assert.strictEqual(data.state[3].name, '.smaller');
+            assert.strictEqual(data.markup.example, '<button>This is a button</button>');
+            assert.strictEqual(data.markup.escaped, '&lt;button&gt;This is a button&lt;/button&gt;');
+            assert.strictEqual(data.deprecated, '123.321');
+            assert.strictEqual(data.deprecatedDescription, 'This is deprecated.');
+            assert.strictEqual(data.group, 'buttons');
+            assert.strictEqual(data.type, 'color');
+            assert.strictEqual(data.subtype, 'text-color');
+        });
+    });
+
 });

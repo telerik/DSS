@@ -456,4 +456,29 @@ dss.parser('markup', (i, line, block, file, parserName) => {
     };
 });
 
+// Describe parsing a deprecated version
+dss.parser('deprecated', (i, line, block, file) => { // eslint-disable-line no-unused-vars
+    return line;
+});
+
+// Describe parsing a deprecated description
+dss.parser('deprecatedDescription', (i, line, block, file) => { // eslint-disable-line no-unused-vars
+    return line;
+});
+
+// Describe parsing a group
+dss.parser('group', (i, line, block, file) => { // eslint-disable-line no-unused-vars
+    return line.toLowerCase();
+});
+
+// Describe parsing a type
+dss.parser('type', (i, line, block, file) => { // eslint-disable-line no-unused-vars
+    return line.toLowerCase();
+});
+
+// Describe parsing a subtype
+dss.parser('subtype', (i, line, block, file) => { // eslint-disable-line no-unused-vars
+    return line.toLowerCase();
+});
+
 module.exports = dss;
