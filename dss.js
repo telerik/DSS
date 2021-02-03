@@ -364,82 +364,87 @@ let dss = ( function() {
 
     };
 
+    _dss.getMultiLineContent = (i, line, block, file, parserName) => {
+        /* eslint-disable no-param-reassign */
+        // find the next instance of a parser (if there is one based on the @ symbol)
+        // in order to isolate the current multi-line parser
+        let nextParserIndex = block.indexOf('@', i + 1);
+        let markupLength = (nextParserIndex > -1) ? nextParserIndex - i : block.length;
+        let markup = _dss.trim(block.split('').splice(i, markupLength).join(''));
+        let parserMarker = '@' + parserName;
+
+        markup = ((markup) => {
+            let ret = [];
+            let lines = markup.split('\n');
+
+            lines.forEach((line) => {
+                let pattern = '*';
+                let index = line.indexOf(pattern);
+
+                if (index > 0 && index < 10) {
+                    line = line.split('').splice((index + pattern.length), line.length).join('');
+                }
+
+                // multiline
+                if (lines.length <= 2) {
+                    line = dss.trim( line );
+                }
+
+                if (line && line.indexOf(parserMarker) === -1) {
+                    ret.push(line);
+                }
+
+            });
+
+            return ret.join('\n');
+        })( markup );
+        /* eslint-enable no-param-reassign */
+
+        return markup;
+    };
+
     // Return function
     return _dss;
-
 })();
 
 // Describe detection pattern
-dss.detector( function( line ) {
-    if ( typeof line !== 'string' ) {
+dss.detector((line) => {
+    if (typeof line !== 'string') {
         return false;
     }
     let reference = line.split( '\n\n' ).pop();
-    return Boolean(reference.match( /.*@/ ));
+    return Boolean(reference.match(/.*@/));
 });
 
 // Describe parsing a name
-dss.parser( 'name', function( i, line, block, file ) { // eslint-disable-line no-unused-vars
+dss.parser('name', (i, line, block, file) => { // eslint-disable-line no-unused-vars
     return line;
 });
 
 // Describe parsing a description
-dss.parser( 'description', function( i, line, block, file ) { // eslint-disable-line no-unused-vars
+dss.parser('description', (i, line, block, file) => { // eslint-disable-line no-unused-vars
     return line;
 });
 
 // Describe parsing a state
-dss.parser( 'state', function( i, line, block, file ) { // eslint-disable-line no-unused-vars
-    let state = line.split( ' - ' );
+dss.parser('state', (i, line, block, file) => { // eslint-disable-line no-unused-vars
+    let state = line.split(' - ');
+
     return [ {
-        name: ( state[ 0 ] ) ? dss.trim( state[ 0 ] ) : '',
-        escaped: ( state[ 0 ] ) ? dss.trim( state[ 0 ].replace( '.', ' ' ).replace( ':', ' pseudo-class-' ) ) : '',
-        description: ( state[ 1 ] ) ? dss.trim( state[ 1 ] ) : ''
+        name: (state[0]) ? dss.trim(state[0]) : '',
+        escaped: (state[0]) ? dss.trim(state[0].replace('.', ' ').replace(':', ' pseudo-class-')) : '',
+        description: (state[1]) ? dss.trim(state[1]) : ''
     } ];
 });
 
 // Describe parsing markup
-dss.parser( 'markup', function( i, line, block, file, parserName ) {
-    /* eslint-disable no-param-reassign */
-    // find the next instance of a parser (if there is one based on the @ symbol)
-    // in order to isolate the current multi-line parser
-    let nextParserIndex = block.indexOf( '* @', i + 1 );
-    let markupLength = ( nextParserIndex > -1 ) ? nextParserIndex - i : block.length;
-    let markup = block.split( '' ).splice( i, markupLength ).join( '' );
-    let parserMarker = '@' + parserName;
-
-    markup = ( function( markup ) {
-        let ret = [];
-        let lines = markup.split( '\n' );
-
-        lines.forEach( function( line ) {
-            let pattern = '*';
-            let index = line.indexOf( pattern );
-
-            if ( index > 0 && index < 10 ) {
-                line = line.split( '' ).splice( ( index + pattern.length ), line.length ).join( '' );
-            }
-
-            // multiline
-            if ( lines.length <= 2 ) {
-                line = dss.trim( line );
-            }
-
-            if ( line && line.indexOf( parserMarker ) === -1 ) {
-                ret.push( line );
-            }
-
-        });
-
-        return ret.join( '\n' );
-        /* eslint-enable no-param-reassign */
-    })( markup );
+dss.parser('markup', (i, line, block, file, parserName) => {
+    let markup = dss.getMultiLineContent(i, line, block, file, parserName);
 
     return {
         example: markup,
-        escaped: markup.replace( /</g, '&lt;' ).replace( />/g, '&gt;' )
+        escaped: markup.replace(/</g, '&lt;').replace(/>/g, '&gt;')
     };
-
 });
 
 module.exports = dss;
