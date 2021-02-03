@@ -6,7 +6,8 @@
     },
     "env": {
         "node": true,
-        "es6": true
+        "es6": true,
+        "mocha": true
     },
     "rules": {
         "array-bracket-spacing": [ "error", "always" ],
@@ -26,7 +27,7 @@
         "key-spacing": [ "error", { "beforeColon": false, "afterColon": true } ],
         "keyword-spacing": [ "error", { "before": true, "after": true } ],
         "linebreak-style": [ "error", "unix" ],
-        "max-params": [ "error", 4 ],
+        "max-params": [ "error", 6 ],
         "no-alert": "error",
         "no-caller": "error",
         "no-class-assign": "error",
