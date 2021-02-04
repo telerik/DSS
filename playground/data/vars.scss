@@ -1,0 +1,54 @@
+/// @name Button
+/// @description Button description
+/// @type myType
+/// @key myKey
+$button-bg: white;
+
+/// @name Grid
+$grid-bg: black;
+
+
+
+/// @name Spacing
+$spacing: (
+    0: 0,
+    1: 4px,
+    xl: 24px,
+    thin: 2px,
+    hair: 1px
+) !default;
+
+
+
+/// @name Decimal Round
+@function decimal-round($float, $digits: 2) {
+    $pow: pow(10, $digits);
+
+    @return round($float * $pow) / $pow;
+}
+
+
+
+/// @name k-d-flex
+.k-d-flex                   { display: flex; }
+
+
+
+/// @name k-resize-none
+
+/// @name Resize Both
+/// @type selector
+/// @key .k-resize-both
+
+
+
+
+$utils-resize: (
+    none,
+    both
+) !default;
+
+@each $resize in $utils-resize {
+    // sass-lint:disable-block no-important
+    .k-resize-#{$resize} { resize: $resize !important; }
+}
