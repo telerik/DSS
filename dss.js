@@ -195,10 +195,12 @@ let dss = ( function() {
         let insideSingleLineBlock = false;
         let insideMultiLineBlock = false;
         let _blocks = [];
+        let _blockValues = [];
         let parsed = '';
         let blocks = [];
         let temp = {};
         let lineNum = 0;
+        const overridableNames = [ 'key', 'type' ];
 
         /*
      * Parses line
@@ -219,9 +221,11 @@ let dss = ( function() {
             let description = _dss.trim( parts.substr( i ) );
             let variable = _dss.parsers[ name ];
             let index = block.indexOf( line );
+
             line = {};
             line[ name ] = ( variable ) ? variable.apply( null, [ index, description, block, file, name ] ) : ''; // eslint-disable-line no-useless-call
-            if ( temp[ name ] ) {
+
+            if ( (overridableNames.indexOf(name) === -1) && temp[ name ] ) {
                 if ( !_dss.isArray( temp[ name ] ) ) {
                     temp[name] = [ temp[ name ] ];
                 }
@@ -327,7 +331,14 @@ let dss = ( function() {
             // Store current block if done
             if ( !singleLineComment( line ) && !insideMultiLineBlock ) {
                 if ( currentBlock ) {
+                    let type = _dss.getKeyType(_dss.trim(line));
+                    let key = _dss.getKey(_dss.trim(line), type);
+
                     _blocks.push( _dss.normalize( currentBlock ) );
+                    _blockValues.push({
+                        'type': type,
+                        'key': key
+                    });
                 }
                 insideSingleLineBlock = false;
                 currentBlock = '';
@@ -337,9 +348,15 @@ let dss = ( function() {
         /* eslint-enable no-param-reassign */
 
         // Create new blocks with custom parsing
-        _blocks.forEach( function( block ) {
+        _blocks.forEach( function( block, i ) {
             /* eslint-disable no-param-reassign */
             // Remove extra whitespace
+            let currentBlockValues = _blockValues[i];
+
+            for ( let key in currentBlockValues ) {
+                temp[key] = currentBlockValues[key];
+            }
+
             block = block.split( '\n' ).filter( function( line ) {
                 return ( _dss.trim( _dss.normalize( line ) ) );
             } ).join( '\n' );
@@ -408,6 +425,46 @@ let dss = ( function() {
         /* eslint-enable no-param-reassign */
 
         return markup;
+    };
+
+    _dss.getKey = (line, type) => {
+        let key = null;
+        let match = null;
+
+        if ( type === 'variable' ) {
+            match = line.match(/\$[^:]+/);
+        }
+
+        if ( type === 'selector' ) {
+            match = line.match(/\.[^\s,{]+/);
+        }
+
+        if ( type === 'function' ) {
+            match = line.match(/(?<=@function[\s]+)([^(\s]+)/);
+        }
+
+        if ( match ) {
+            key = match[0];
+        }
+
+        return key;
+    };
+
+    _dss.getKeyType = (line) => {
+
+        if ( line.indexOf('$') === 0 ) {
+            return 'variable';
+        }
+
+        if ( line.indexOf('.') === 0 ) {
+            return 'selector';
+        }
+
+        if ( line.indexOf('@function') === 0 ) {
+            return 'function';
+        }
+
+        return null;
     };
 
     // Return function
@@ -479,6 +536,11 @@ dss.parser('type', (i, line, block, file) => { // eslint-disable-line no-unused-
 // Describe parsing a subtype
 dss.parser('subtype', (i, line, block, file) => { // eslint-disable-line no-unused-vars
     return line.toLowerCase();
+});
+
+// Describe parsing a type
+dss.parser('key', (i, line, block, file) => { // eslint-disable-line no-unused-vars
+    return line;
 });
 
 module.exports = dss;

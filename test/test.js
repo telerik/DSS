@@ -90,4 +90,41 @@ describe('Core tests', function() {
         });
     });
 
+    it('should should parse and include key values', function() {
+        const file = fs.readFileSync(path.join(__dirname, 'data/all-key-types.scss'), 'utf8');
+
+        dss.parse(file, {}, function(parsed) {
+            const blocks = parsed.blocks;
+
+            assert.strictEqual(blocks[0].name, 'Button');
+            assert.strictEqual(blocks[0].description, 'Button description');
+            assert.strictEqual(blocks[0].type, 'mytype');
+            assert.strictEqual(blocks[0].key, 'myKey');
+
+            assert.strictEqual(blocks[1].name, 'Grid');
+            assert.strictEqual(blocks[1].type, 'variable');
+            assert.strictEqual(blocks[1].key, '$grid-bg');
+
+            assert.strictEqual(blocks[2].name, 'Spacing');
+            assert.strictEqual(blocks[2].type, 'variable');
+            assert.strictEqual(blocks[2].key, '$spacing');
+
+            assert.strictEqual(blocks[3].name, 'Decimal Round');
+            assert.strictEqual(blocks[3].type, 'function');
+            assert.strictEqual(blocks[3].key, 'decimal-round');
+
+            assert.strictEqual(blocks[4].name, 'k-d-flex');
+            assert.strictEqual(blocks[4].type, 'selector');
+            assert.strictEqual(blocks[4].key, '.k-d-flex');
+
+            assert.strictEqual(blocks[5].name, 'k-resize-none');
+            assert.strictEqual(blocks[5].type, null);
+            assert.strictEqual(blocks[5].key, null);
+
+            assert.strictEqual(blocks[6].name, 'Resize Both');
+            assert.strictEqual(blocks[6].type, 'selector');
+            assert.strictEqual(blocks[6].key, '.k-resize-both');
+        });
+    });
+
 });
