@@ -12,9 +12,9 @@ let dss = ( function() {
     };
 
     /**
-     * Modify detector method
+     * Modify detector method.
      *
-     * @param (Function) The callback to be used to detect variables
+     * @param {function} callback - The callback to be used to detect variables.
      */
     _dss.detector = function( callback ) {
         _dss.detect = callback;
@@ -24,30 +24,30 @@ let dss = ( function() {
     _dss.parsers = {};
 
     /**
-     * Add a parser for a specific variable
+     * Add a parser for a specific variable.
      *
-     * @param (String) The name of the variable
-     * @param (Function) The callback to be executed at parse time
+     * @param {string} name - The name of the variable.
+     * @param {function} callback - The callback to be executed at parse time.
      */
     _dss.parser = function( name, callback ) {
         _dss.parsers[ name ] = callback;
     };
 
     /**
-     * Add an alias for a parser
+     * Add an alias for a parser.
      *
-     * @param (String) The name of the new variable
-     * @param (String) The name of the existing parser to use
+     * @param {String} newName - The name of the new variable.
+     * @param {String} oldName - The name of the existing parser to use.
      */
     _dss.alias = function( newName, oldName ) {
         _dss.parsers[ newName ] = _dss.parsers[ oldName ];
     };
 
     /**
-     * Trim whitespace from string
+     * Trim whitespace from string.
      *
-     * @param (String) The string to be trimmed
-     * @return (String) The trimmed string
+     * @param {string} str - The string to be trimmed.
+     * @returns {string} - The trimmed string.
      */
     _dss.trim = function( str, arr ) {
         /* eslint-disable no-param-reassign */
@@ -61,20 +61,20 @@ let dss = ( function() {
     };
 
     /**
-     * Check if object is an array
+     * Check if object is an array.
      *
-     * @param (Object) The object to check
-     * @return (Boolean) The result of the test
+     * @param {object} obj - The object to check.
+     * @returns {boolean} - The result of the test.
      */
     _dss.isArray = function( obj ) {
         return toString.call( obj ) === '[object Array]';
     };
 
     /**
-     * Check the size of an object
+     * Check the size of an object.
      *
-     * @param (Object) The object to check
-     * @return (Boolean) The result of the test
+     * @param {object} obj - The object to check.
+     * @returns {boolean} - The result of the test.
      */
     _dss.size = function( obj ) {
         let size = 0;
@@ -85,11 +85,11 @@ let dss = ( function() {
     };
 
     /**
-     * Iterate over an object
+     * Iterate over an object.
      *
-     * @param (Object) The object to iterate over
-     * @param (Function) Callback function to use when iterating
-     * @param (Object) Optional context to pass to iterator
+     * @param {object} obj - The object to iterate over.
+     * @param {function} iterator - Callback function to use when iterating.
+     * @param {object} context - Optional context to pass to iterator.
      */
     _dss.each = function( obj, iterator, context ) {
         if ( obj === null ) {
@@ -113,9 +113,9 @@ let dss = ( function() {
     };
 
     /**
-     * Extend an object
+     * Extend an object.
      *
-     * @param (Object) The object to extend
+     * @param {object} obj - The object to extend.
      */
     _dss.extend = function( obj ) {
         _dss.each( Array.prototype.slice.call( arguments, 1 ), function( source ) {
@@ -129,11 +129,11 @@ let dss = ( function() {
     };
 
     /**
-     * Squeeze unnecessary extra characters/string
+     * Squeeze unnecessary extra characters/string.
      *
-     * @param (String) The string to be squeeze
-     * @param (String) The string to be matched
-     * @return (String) The modified string
+     * @param {string} str - The string to be squeeze.
+     * @param {string} def - The string to be matched.
+     * @returns {string} - The modified string.
      */
     _dss.squeeze = function( str, def ) {
         return str.replace( /\s{2,}/g, def );
@@ -145,8 +145,8 @@ let dss = ( function() {
      * of the comment block. Also strips any whitespace at the start and end of
      * the whole block.
      *
-     * @param (String) Text block
-     * @return (String) A cleaned up text block
+     * @param {string} block - Text block.
+     * @returns {string} - A cleaned up text block.
      */
     _dss.normalize = function( block ) {
 
@@ -180,8 +180,9 @@ let dss = ( function() {
     /**
      * Takes a file and extracts comments from it.
      *
-     * @param (Object) options
-     * @param (Function) callback
+     * @param {string} lines - Lines to parse.
+     * @param {object} options - Options.
+     * @param {function} callback - Callback.
      */
     _dss.parse = function( lines, options, callback ) {
 
@@ -203,12 +204,13 @@ let dss = ( function() {
         const overridableNames = [ 'key', 'type' ];
 
         /**
-         * Parses line
+         * Parses a line.
          *
-         * @param (Num) the line number
-         * @param (Num) number of lines
-         * @param (String) line to parse/check
-         * @return (Boolean) result of parsing
+         * @param {object} temp - The temporary object value.
+         * @param {string} line - The line to parse.
+         * @param {string} block - Parsed block.
+         * @param {string} file - Parsed file.
+         * @returns {object} - Result of parsing.
          */
         let parser = function( temp, line, block, file ) {
             /* eslint-disable no-param-reassign */
@@ -242,30 +244,30 @@ let dss = ( function() {
         };
 
         /**
-         * Check for single-line comment
+         * Check for single-line comment.
          *
-         * @param (String) line to parse/check
-         * @return (Boolean) result of check
+         * @param {string} line - Line to parse/check.
+         * @returns {boolean} - Result of check.
          */
         let singleLineComment = function( line ) {
             return Boolean(line.match( /^\s*\/\/\// ));
         };
 
         /**
-         * Checks for start of a multi-line comment
+         * Checks for start of a multi-line comment.
          *
-         * @param (String) line to parse/check
-         * @return (Boolean) result of check
+         * @param {string} line - Line to parse/check.
+         * @returns {boolean} - Result of check.
          */
         let startMultiLineComment = function( line ) {
             return Boolean(line.match( /^\s*\/\*/ ));
         };
 
         /**
-         * Check for end of a multi-line comment
+         * Check for end of a multi-line comment.
          *
-         * @parse (String) line to parse/check
-         * @return (Boolean) result of check
+         * @param {string} line - Line to parse/check.
+         * @returns {boolean} - Result of check.
          */
         let endMultiLineComment = function( line ) {
             if ( singleLineComment( line ) ) {
@@ -277,8 +279,8 @@ let dss = ( function() {
         /**
          * Removes comment identifiers for single-line comments.
          *
-         * @param (String) line to parse/check
-         * @return (Boolean) result of check
+         * @param {string} line - Line to parse/check.
+         * @returns {boolean} - Result of check.
          */
         let parseSingleLine = function( line ) {
             return line.replace( /\s*\/\/\//, '' );
@@ -287,8 +289,8 @@ let dss = ( function() {
         /**
          * Remove comment identifiers for multi-line comments.
          *
-         * @param (String) line to parse/check
-         * @return (Boolean) result of check
+         * @param {string} line - Line to parse/check.
+         * @returns {boolean} - Result of check.
          */
         let parseMultiLine = function( line ) {
             let cleaned = line.replace( /\s*\/\*/, '' );
@@ -381,6 +383,16 @@ let dss = ( function() {
 
     };
 
+    /**
+     * Used by parsers to get the content of multi-line annotations.
+     *
+     * @param {number} i - Index of the parser.
+     * @param {string} line - Line to parse.
+     * @param {string} block - Parsed block.
+     * @param {string} file - Parsed file.
+     * @param {string} parserName - Name of the parser.
+     * @returns {string} - Result of parsing.
+     */
     _dss.getMultiLineContent = (i, line, block, file, parserName) => {
         /* eslint-disable no-param-reassign */
         // find the next instance of a parser (if there is one based on the @ symbol)
@@ -427,6 +439,12 @@ let dss = ( function() {
         return markup;
     };
 
+    /**
+     * Get the tags information.
+     *
+     * @param {string} line - Line to parse.
+     * @returns {arr} - The array with the values.
+     */
     _dss.extractJSDocTags = (line) => {
         const state = [];
         const typeRegEx = /\([^]+\)/;
@@ -440,6 +458,13 @@ let dss = ( function() {
         return state;
     };
 
+    /**
+     * Get the Key of the block.
+     *
+     * @param {string} line - Line to parse.
+     * @param {string} type - Type of the key.
+     * @returns - The key if defined.
+     */
     _dss.getKey = (line, type) => {
         let key = null;
         let match = null;
@@ -462,6 +487,12 @@ let dss = ( function() {
         return key;
     };
 
+    /**
+     * Get the KeyType of the block.
+     *
+     * @param {string} line - Line to parse.
+     * @returns - The KeyType if defined.
+     */
     _dss.getKeyType = (line) => {
 
         if ( line.indexOf('$') === 0 ) {
