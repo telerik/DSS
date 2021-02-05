@@ -430,18 +430,17 @@ let dss = ( function() {
     _dss.getKey = (line, type) => {
         let key = null;
         let match = null;
+        const matchers = {
+            'variable': /\$[^:]+/,
+            'selector': /\.[^\s,{]+/,
+            'function': /(?<=@function[\s]+)([^(\s]+)/
+        };
 
-        if ( type === 'variable' ) {
-            match = line.match(/\$[^:]+/);
+        if (type === null) {
+            return key;
         }
 
-        if ( type === 'selector' ) {
-            match = line.match(/\.[^\s,{]+/);
-        }
-
-        if ( type === 'function' ) {
-            match = line.match(/(?<=@function[\s]+)([^(\s]+)/);
-        }
+        match = line.match(matchers[type]);
 
         if ( match ) {
             key = match[0];
