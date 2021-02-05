@@ -427,6 +427,19 @@ let dss = ( function() {
         return markup;
     };
 
+    _dss.extractJSDocTags = (line) => {
+        const state = [];
+        const typeRegEx = /\([^]+\)/;
+        const match = line.match(typeRegEx);
+
+        if (match) {
+            state.push( match[0] );
+            state.push( line.replace(typeRegEx, '') );
+        }
+
+        return state;
+    };
+
     _dss.getKey = (line, type) => {
         let key = null;
         let match = null;
@@ -540,6 +553,26 @@ dss.parser('subtype', (i, line, block, file) => { // eslint-disable-line no-unus
 // Describe parsing a key
 dss.parser('key', (i, line, block, file) => { // eslint-disable-line no-unused-vars
     return line;
+});
+
+// Describe parsing a param
+dss.parser('param', (i, line, block, file) => { // eslint-disable-line no-unused-vars
+    const state = dss.extractJSDocTags(line);
+
+    return [ {
+        type: (state[0]) ? dss.trim(state[0]) : '',
+        description: (state[1]) ? dss.trim(state[1]) : ''
+    } ];
+});
+
+// Describe parsing a return
+dss.parser('return', (i, line, block, file) => { // eslint-disable-line no-unused-vars
+    const state = dss.extractJSDocTags(line);
+
+    return {
+        type: (state[0]) ? dss.trim(state[0]) : '',
+        description: (state[1]) ? dss.trim(state[1]) : ''
+    };
 });
 
 module.exports = dss;

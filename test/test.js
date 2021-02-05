@@ -98,6 +98,12 @@ describe('Core tests', function() {
             assert.strictEqual(data.group, 'buttons');
             assert.strictEqual(data.type, 'color');
             assert.strictEqual(data.subtype, 'text-color');
+            assert.strictEqual(data.param[0].type, '(String)');
+            assert.strictEqual(data.param[0].description, 'par1');
+            assert.strictEqual(data.param[1].type, '(Function)');
+            assert.strictEqual(data.param[1].description, 'par2');
+            assert.strictEqual(data.return.type, '(Number)');
+            assert.strictEqual(data.return.description, 'return description');
         });
     });
 
