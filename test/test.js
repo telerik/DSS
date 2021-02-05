@@ -65,6 +65,17 @@ describe('Core tests', function() {
         });
     });
 
+    it('description with the @ symbol is correctly parsed', function() {
+        const file = fs.readFileSync(path.join(__dirname, 'data/description-with-special-symbol.scss'), 'utf8');
+
+        dss.parse(file, {}, function(parsed) {
+            const data = parsed.blocks[0];
+
+            assert.strictEqual(data.name, 'Special character "@" description test.');
+            assert.strictEqual(data.description, 'Your standard description with an @ in it\nsecond row test');
+        });
+    });
+
     it('should should parse all annotations', function() {
         const file = fs.readFileSync(path.join(__dirname, 'data/all-annotations.scss'), 'utf8');
 

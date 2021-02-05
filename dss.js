@@ -215,7 +215,7 @@ let dss = ( function() {
             let indexer = function( str, find ) {
                 return ( str.indexOf( find ) > 0 ) ? str.indexOf( find ) : false;
             };
-            let parts = line.replace( /.*@/, '' );
+            let parts = line.replace( /[^@]*@/, '' );
             let i = indexer( parts, ' ' ) || indexer( parts, '\n' ) || indexer( parts, '\r' ) || parts.length;
             let name = _dss.trim( parts.substr( 0, i ) );
             let description = _dss.trim( parts.substr( i ) );
@@ -385,7 +385,7 @@ let dss = ( function() {
         /* eslint-disable no-param-reassign */
         // find the next instance of a parser (if there is one based on the @ symbol)
         // in order to isolate the current multi-line parser
-        let nextParserIndex = block.indexOf('@', i + 1);
+        let nextParserIndex = block.indexOf('\n @', i + 1);
         let markupLength = (nextParserIndex > -1) ? nextParserIndex - i : block.length;
         let markup = _dss.trim(block.split('').splice(i, markupLength).join(''));
         let parserMarker = '@' + parserName;
