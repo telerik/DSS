@@ -293,12 +293,13 @@ let dss = ( function() {
          * @returns {boolean} - Result of check.
          */
         let parseMultiLine = function( line ) {
-            let cleaned = line.replace( /\s*\/\*/, '' );
-            return cleaned.replace( /\*\//, '' );
+            let cleaned = line.replace( /\s*\/\*/, '' ).trim();
+            cleaned = cleaned.replace( /\*\//, '' );
+            return cleaned.replace( /^\*/, '' );
         };
         /* eslint-disable no-param-reassign */
         lines = String(lines);
-        lines.split( /\n/ ).forEach( function( line ) {
+        lines.split( /\n/ ).forEach(( line, index, linesArr ) => {
 
             lineNum = lineNum + 1;
             line = String(line);
@@ -333,8 +334,9 @@ let dss = ( function() {
             // Store current block if done
             if ( !singleLineComment( line ) && !insideMultiLineBlock ) {
                 if ( currentBlock ) {
-                    let type = _dss.getKeyType(_dss.trim(line));
-                    let key = _dss.getKey(_dss.trim(line), type);
+                    const lineToParse = endMultiLineComment(line) ? String(linesArr[index + 1]) : line;
+                    const type = _dss.getKeyType(_dss.trim(lineToParse));
+                    const key = _dss.getKey(_dss.trim(lineToParse), type);
 
                     _blocks.push( _dss.normalize( currentBlock ) );
                     _blockValues.push({
