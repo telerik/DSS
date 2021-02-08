@@ -1,14 +1,10 @@
-![DSS](http://cl.ly/image/2p0C122U0N32/logo.png)
-- **[Official Logo](http://cl.ly/image/2p0C122U0N32/logo.png)**
-- **[NPM Package](https://npmjs.org/package/dss)**
+# DSS
 
-[![NPM](https://nodei.co/npm/dss.png?downloadRank=true)](https://npmjs.org/package/dss)  
-
-**DSS**, Documented Style Sheets, is a comment styleguide and parser for CSS, LESS, STYLUS, SASS and SCSS code.
+**DSS**, Documented Style Sheets, is a comment styleguide and parser for CSS, LESS, SASS and SCSS code.
 
 ## Generating Documentation
 
-In most cases, you will want to include the **DSS** parser in a build step that will generate documentation files automatically. **[grunt-dss](https://github.com/darcyclarke/grunt-dss)** is the official **DSS** `grunt` task which does just that.
+In most cases, you will want to include the **DSS** parser in a build step that will generate documentation files automatically.
 
 ## Parser Example
 
@@ -18,46 +14,73 @@ In most cases, you will want to include the **DSS** parser in a build step that 
 /**
   * @name Button
   * @description Your standard form button.
-  * 
+  *
   * @state :hover - Highlights when hovering.
   * @state :disabled - Dims the button when disabled.
   * @state .primary - Indicates button is the primary action.
-  * @state .smaller - A smaller button
-  * 
+  * @state .smaller - A smaller button.
+  *
   * @markup
-  *   <button>This is a button</button>
-  */ 
-````
+  * <span>
+  *     <button>This is a button</button>
+  * </span>
+  *
+  * @deprecated 123.321
+  * @deprecatedDescription This is deprecated.
+  *
+  * @group Buttons
+  * @type Color
+  * @subtype Text-Color
+  * @key $button-bg
+  *
+  * @param {string} par1 - ParmOne description.
+  * @param {function} par2 - ParamTwo description.
+  * @returns {number} - Return description.
+  */
+```
 #### or
 
 ```scss
-//
-// @name Button
-// @description Your standard form button.
-// 
-// @state :hover - Highlights when hovering.
-// @state :disabled - Dims the button when disabled.
-// @state .primary - Indicates button is the primary action.
-// @state .smaller - A smaller button
-// 
-// @markup
-//   <button>This is a button</button>
-// 
-````
+/// @name Button
+/// @description Your standard form button.
+///
+/// @state :hover - Highlights when hovering.
+/// @state :disabled - Dims the button when disabled.
+/// @state .primary - Indicates button is the primary action.
+/// @state .smaller - A smaller button.
+///
+/// @markup
+/// <span>
+///     <button>This is a button</button>
+/// </span>
+///
+/// @deprecated 123.321
+/// @deprecatedDescription This is deprecated.
+///
+/// @group Buttons
+/// @type Color
+/// @subtype Text-Color
+/// @key $button-bg
+///
+/// @param {string} par1 - ParmOne description.
+/// @param {function} par2 - ParamTwo description.
+/// @returns {number} - Return description.
+///
+```
 
-#### Example Parser Implementation
+## Basic Usage
 
 ```javascript
 // Require/read a file
-var fs = require( 'fs' );
-var file = fs.readFileSync( 'styles.css' );
+const fs = require( 'fs' );
+const dss = require('dss');
+const file = fs.readFileSync('styles.scss');
 
 // Run DSS Parser
-dss.parse( file, {}, function ( parsed ) {
+dss.parse(file, {}, (parsed) => {
   console.log( parsed );
 });
-
-````
+```
 
 #### Example Generated Object
 
@@ -66,7 +89,7 @@ dss.parse( file, {}, function ( parsed ) {
   "name": "Button",
   "description": "Your standard form button.",
   "state": [
-    { 
+    {
       "name": ":hover",
       "escaped": "pseudo-class-hover",
       "description": "Highlights when hovering."
@@ -84,34 +107,63 @@ dss.parse( file, {}, function ( parsed ) {
     {
       "name": ".smaller",
       "escaped": "smaller",
-      "description": "A smaller button"
+      "description": "A smaller button."
     }
   ],
   "markup": {
-    "example": "<button>This is a button</button>",
-    "escaped": "&lt;button&gt;This is a button&lt;/button&gt;"
+    "example": " <span>\n     <button>This is a button</button>\n </span>",
+    "escaped": " &lt;span&gt;\n     &lt;button&gt;This is a button&lt;/button&gt;\n &lt;/span&gt;"
+  },
+  "deprecated": "123.321",
+  "deprecatedDescription": "This is deprecated.",
+  "group": "buttons",
+  "type": "color",
+  "subtype": "text-color",
+  "key": "$button-bg",
+  "param": [
+    {
+      "type": "{string}",
+      "name": "par1",
+      "description": "ParmOne description."
+    },
+    {
+      "type": "{function}",
+      "name": "par2",
+      "description": "ParmTwo description."
+    }
+  ],
+  "returns": {
+    "type": "{number}",
+    "name": null,
+    "description": "Return description."
   }
 }
-````
+```
+
+## Parsers Specifics
+
+1. Only the `description` and `markup` parsers allow usage of multi-line comments.
+1. The `state` and `param` parsers are returning an array of all the relevant annotations.
+1. If not defined, the parser tries to assume the `type` and `key` values based on the next line.
+1. The `group`, `type`, and `subtype` parsers convert the string annotation to lowercase letters.
 
 ## Modifying Parsers
 
-**DSS**, by default, includes 4 parsers for the **name**, **description**, **states** and **markup** of a comment block. You can add to or override these default parsers using the following:
+**DSS**, by default, includes the `name`, `description`, `state`, `markup`, `deprecated`, `deprecatedDescription`, `group`, `type`, `subtype`, `key`, `param`, and `returns` parsers of a comment block. You can add to or override these default parsers using the following:
 
 ```javascript
 // Matches @link
-dss.parser('link', function(i, line, block){
-
+dss.parser('link', (i, line, block, file) => {
   // Replace link with HTML wrapped version
-  var exp = /(b(https?|ftp|file)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
-  line.replace(exp, "<a href='$1'>$1</a>");
-  return line;
-   
+  const exp = /(b(https?|ftp|file)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
+
+  return line.replace(exp, "<a href='$1'>$1</a>");
 });
-````
+```
 
-## DSS Sublime Text Plugin
-
-You can now **auto-complete** DSS-style comment blocks using @sc8696's [Auto-Comments Sublime Text Plugin](https://github.com/sc8696/sublime-css-auto-comments)
-
-
+```javascript
+// Matches @version
+dss.parser('version', (i, line, block, file) => {
+  return line;
+});
+```
