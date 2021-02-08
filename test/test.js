@@ -5,12 +5,12 @@ const path = require('path');
 
 [ 'css', 'scss' ].forEach((ext) => {
 
-    describe(`Core tests - ${ext}`, function() {
+    describe(`Core tests - ${ext}`, () => {
 
-        it('should should parse the data', function() {
+        it('should should parse the data', () => {
             const file = fs.readFileSync(path.join(__dirname, `data/${ext}/button.scss`), 'utf8');
 
-            dss.parse(file, {}, function(parsed) {
+            dss.parse(file, {}, (parsed) => {
                 const data = parsed.blocks[0];
 
                 assert.strictEqual(data.name, 'Button');
@@ -35,10 +35,10 @@ const path = require('path');
             });
         });
 
-        it('multiline markup is correctly parsed when not as last parser', function() {
+        it('multiline markup is correctly parsed when not as last parser', () => {
             const file = fs.readFileSync(path.join(__dirname, `data/${ext}/markup-not-last.scss`), 'utf8');
 
-            dss.parse(file, {}, function(parsed) {
+            dss.parse(file, {}, (parsed) => {
                 const data = parsed.blocks[0];
 
                 assert.strictEqual(data.name, 'Button');
@@ -56,10 +56,10 @@ const path = require('path');
             });
         });
 
-        it('multiline description is correctly parsed', function() {
+        it('multiline description is correctly parsed', () => {
             const file = fs.readFileSync(path.join(__dirname, `data/${ext}/multi-line-description.scss`), 'utf8');
 
-            dss.parse(file, {}, function(parsed) {
+            dss.parse(file, {}, (parsed) => {
                 const data = parsed.blocks[0];
 
                 assert.strictEqual(data.name, 'Multi Line description');
@@ -67,10 +67,10 @@ const path = require('path');
             });
         });
 
-        it('description with the @ symbol is correctly parsed', function() {
+        it('description with the @ symbol is correctly parsed', () => {
             const file = fs.readFileSync(path.join(__dirname, `data/${ext}/description-with-special-symbol.scss`), 'utf8');
 
-            dss.parse(file, {}, function(parsed) {
+            dss.parse(file, {}, (parsed) => {
                 const data = parsed.blocks[0];
 
                 assert.strictEqual(data.name, 'Special character "@" description test.');
@@ -78,10 +78,10 @@ const path = require('path');
             });
         });
 
-        it('should should parse all annotations', function() {
+        it('should should parse all annotations', () => {
             const file = fs.readFileSync(path.join(__dirname, `data/${ext}/all-annotations.scss`), 'utf8');
 
-            dss.parse(file, {}, function(parsed) {
+            dss.parse(file, {}, (parsed) => {
                 const data = parsed.blocks[0];
 
                 assert.strictEqual(data.name, 'Button');
@@ -121,10 +121,10 @@ const path = require('path');
             });
         });
 
-        it('should should parse and include key values', function() {
+        it('should should parse and include key values', () => {
             const file = fs.readFileSync(path.join(__dirname, `data/${ext}/all-key-types.scss`), 'utf8');
 
-            dss.parse(file, {}, function(parsed) {
+            dss.parse(file, {}, (parsed) => {
                 const blocks = parsed.blocks;
 
                 assert.strictEqual(blocks[0].name, 'Button');
