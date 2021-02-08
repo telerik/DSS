@@ -446,13 +446,36 @@ let dss = ( function() {
      * @returns {arr} - The array with the values.
      */
     _dss.extractJSDocTags = (line) => {
-        const state = [];
-        const typeRegEx = /\([^]+\)/;
-        const match = line.match(typeRegEx);
+        let currentLine = line;
+        const state = {};
+        const typeRegEx = /\{[^]+\}/;
+        const nameRegEx = /[^-]*/;
+        const descriptionRegEx = /[^-]*-\s/;
+        const match = currentLine.match(typeRegEx);
 
         if (match) {
-            state.push( match[0] );
-            state.push( line.replace(typeRegEx, '') );
+            state.type = match[0];
+            currentLine = currentLine.replace(typeRegEx, '');
+        } else {
+            state.type = null;
+        }
+
+        currentLine = _dss.trim(currentLine);
+
+        if (currentLine.indexOf('-') === -1) {
+            state.name = currentLine;
+            state.description = null;
+        } else {
+            state.name = _dss.trim(currentLine.match(nameRegEx)[0]);
+
+            if (state.name.length === 0) {
+                state.name = null;
+            }
+
+            currentLine = currentLine.replace(nameRegEx, '');
+            currentLine = currentLine.replace(descriptionRegEx, '');
+            currentLine = _dss.trim(currentLine);
+            state.description = currentLine;
         }
 
         return state;
@@ -591,18 +614,20 @@ dss.parser('param', (i, line, block, file) => { // eslint-disable-line no-unused
     const state = dss.extractJSDocTags(line);
 
     return [ {
-        type: (state[0]) ? dss.trim(state[0]) : '',
-        description: (state[1]) ? dss.trim(state[1]) : ''
+        type: state.type,
+        name: state.name,
+        description: state.description
     } ];
 });
 
 // Describe parsing a return
-dss.parser('return', (i, line, block, file) => { // eslint-disable-line no-unused-vars
+dss.parser('returns', (i, line, block, file) => { // eslint-disable-line no-unused-vars
     const state = dss.extractJSDocTags(line);
 
     return {
-        type: (state[0]) ? dss.trim(state[0]) : '',
-        description: (state[1]) ? dss.trim(state[1]) : ''
+        type: state.type,
+        name: state.name,
+        description: state.description
     };
 });
 
