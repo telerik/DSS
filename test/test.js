@@ -100,6 +100,7 @@ const path = require('path');
                 assert.strictEqual(data.group, 'buttons');
                 assert.strictEqual(data.type, 'color');
                 assert.strictEqual(data.subtype, 'text-color');
+                assert.strictEqual(data.key, '$button-bg');
                 assert.strictEqual(data.param[0].type, '{string}');
                 assert.strictEqual(data.param[0].name, 'par1');
                 assert.strictEqual(data.param[0].description, 'parmOne description');
