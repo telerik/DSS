@@ -72,20 +72,20 @@ In most cases, you will want to include the **DSS** parser in a build step that 
 
 ```javascript
 // Require/read a file
-const fs = require( 'fs' );
+const fs = require('fs');
 const dss = require('dss');
 const file = fs.readFileSync('styles.scss');
 
 // Run DSS Parser
 dss.parse(file, {}, (parsed) => {
-  console.log( parsed );
+  console.log(parsed.blocks);
 });
 ```
 
 #### Example Generated Object
 
 ```json
-{
+[{
   "name": "Button",
   "description": "Your standard form button.",
   "state": [
@@ -137,7 +137,7 @@ dss.parse(file, {}, (parsed) => {
     "name": null,
     "description": "Return description."
   }
-}
+}]
 ```
 
 ## Parsers Specifics
