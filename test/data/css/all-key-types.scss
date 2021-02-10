@@ -1,19 +1,19 @@
 /**
-  * @name Button
-  * @description Button description
-  * @type myType
-  * @key myKey
-  */
+ * @name Button
+ * @description Button description
+ * @type myType
+ * @key myKey
+ */
 $button-bg: white;
 
 /**
-  * @name Grid
-  */
+ * @name Grid
+ */
 $grid-bg: black;
 
 /**
-  * @name Spacing
-  */
+ * @name Spacing
+ */
 $spacing: (
     0: 0,
     1: 4px,
@@ -23,8 +23,8 @@ $spacing: (
 ) !default;
 
 /**
-  * @name Decimal Round
-  */
+ * @name Decimal Round
+ */
 @function decimal-round($float, $digits: 2) {
     $pow: pow(10, $digits);
 
@@ -32,19 +32,19 @@ $spacing: (
 }
 
 /**
-  * @name k-d-flex
-  */
+ * @name k-d-flex
+ */
 .k-d-flex                   { display: flex; }
 
 /**
-  * @name k-resize-none
-  */
+ * @name k-resize-none
+ */
 
 /**
-  * @name Resize Both
-  * @type selector
-  * @key .k-resize-both
-  */
+ * @name Resize Both
+ * @type selector
+ * @key .k-resize-both
+ */
 
 $utils-resize: (
     none,

@@ -12,31 +12,31 @@ In most cases, you will want to include the **DSS** parser in a build step that 
 
 ```css
 /**
-  * @name Button
-  * @description Your standard form button.
-  *
-  * @state :hover - Highlights when hovering.
-  * @state :disabled - Dims the button when disabled.
-  * @state .primary - Indicates button is the primary action.
-  * @state .smaller - A smaller button.
-  *
-  * @example
-  * <span>
-  *     <button>This is a button</button>
-  * </span>
-  *
-  * @deprecated 123.321
-  * @deprecatedDescription This is deprecated.
-  *
-  * @group Buttons
-  * @type Color
-  * @subtype Text-Color
-  * @key $button-bg
-  *
-  * @param {string} par1 - ParmOne description.
-  * @param {function} par2 - ParamTwo description.
-  * @returns {number} - Return description.
-  */
+ * @name Button
+ * @description Your standard form button.
+ *
+ * @state :hover - Highlights when hovering.
+ * @state :disabled - Dims the button when disabled.
+ * @state .primary - Indicates button is the primary action.
+ * @state .smaller - A smaller button.
+ *
+ * @example
+ * <span>
+ *     <button>This is a button</button>
+ * </span>
+ *
+ * @deprecated 123.321
+ * @deprecatedDescription This is deprecated.
+ *
+ * @group Buttons
+ * @type Color
+ * @subtype Text-Color
+ * @key $button-bg
+ *
+ * @param {string} par1 - ParmOne description.
+ * @param {function} par2 - ParamTwo description.
+ * @returns {number} - Return description.
+ */
 ```
 #### or
 
