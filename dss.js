@@ -538,15 +538,15 @@ let dss = ( function() {
      */
     _dss.getKeyType = (line) => {
 
-        if ( line.indexOf('$') === 0 ) {
+        if ( line.startsWith('$') ) {
             return 'variable';
         }
 
-        if ( line.indexOf('.') === 0 ) {
+        if ( line.startsWith('.') ) {
             return 'selector';
         }
 
-        if ( line.indexOf('@function') === 0 ) {
+        if ( line.startsWith('@function') ) {
             return 'function';
         }
 
