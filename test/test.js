@@ -22,12 +22,12 @@ const path = require('path');
                 assert.strictEqual(data.state[2].name, '.primary');
                 assert.strictEqual(data.state[2].description, 'Indicates button is the primary action.');
                 assert.strictEqual(data.state[3].name, '.smaller');
-                assert.strictEqual(data.markup.example,
+                assert.strictEqual(data.example.example,
                     '   <span>\n' +
                     '     <button>This is a button</button>\n' +
                     '   </span>'
                 );
-                assert.strictEqual(data.markup.escaped,
+                assert.strictEqual(data.example.escaped,
                     '   &lt;span&gt;\n' +
                     '     &lt;button&gt;This is a button&lt;/button&gt;\n' +
                     '   &lt;/span&gt;'
@@ -35,20 +35,20 @@ const path = require('path');
             });
         });
 
-        it('multiline markup is correctly parsed when not as last parser', () => {
-            const file = fs.readFileSync(path.join(__dirname, `data/${ext}/markup-not-last.scss`), 'utf8');
+        it('multiline example is correctly parsed when not as last parser', () => {
+            const file = fs.readFileSync(path.join(__dirname, `data/${ext}/example-not-last.scss`), 'utf8');
 
             dss.parse(file, {}, (parsed) => {
                 const data = parsed.blocks[0];
 
                 assert.strictEqual(data.name, 'Button');
                 assert.strictEqual(data.description, 'Your standard form button.');
-                assert.strictEqual(data.markup.example,
+                assert.strictEqual(data.example.example,
                     '   <span>\n' +
                     '     <button>This is a button</button>\n' +
                     '   </span>'
                 );
-                assert.strictEqual(data.markup.escaped,
+                assert.strictEqual(data.example.escaped,
                     '   &lt;span&gt;\n' +
                     '     &lt;button&gt;This is a button&lt;/button&gt;\n' +
                     '   &lt;/span&gt;'
@@ -93,8 +93,8 @@ const path = require('path');
                 assert.strictEqual(data.state[2].name, '.primary');
                 assert.strictEqual(data.state[2].description, 'Indicates button is the primary action.');
                 assert.strictEqual(data.state[3].name, '.smaller');
-                assert.strictEqual(data.markup.example, '<button>This is a button</button>');
-                assert.strictEqual(data.markup.escaped, '&lt;button&gt;This is a button&lt;/button&gt;');
+                assert.strictEqual(data.example.example, '<button>This is a button</button>');
+                assert.strictEqual(data.example.escaped, '&lt;button&gt;This is a button&lt;/button&gt;');
                 assert.strictEqual(data.deprecated, '123.321');
                 assert.strictEqual(data.deprecatedDescription, 'This is deprecated.');
                 assert.strictEqual(data.group, 'buttons');

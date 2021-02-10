@@ -20,7 +20,7 @@ In most cases, you will want to include the **DSS** parser in a build step that 
   * @state .primary - Indicates button is the primary action.
   * @state .smaller - A smaller button.
   *
-  * @markup
+  * @example
   * <span>
   *     <button>This is a button</button>
   * </span>
@@ -49,7 +49,7 @@ In most cases, you will want to include the **DSS** parser in a build step that 
 /// @state .primary - Indicates button is the primary action.
 /// @state .smaller - A smaller button.
 ///
-/// @markup
+/// @example
 /// <span>
 ///     <button>This is a button</button>
 /// </span>
@@ -110,7 +110,7 @@ dss.parse(file, {}, (parsed) => {
       "description": "A smaller button."
     }
   ],
-  "markup": {
+  "example": {
     "example": " <span>\n     <button>This is a button</button>\n </span>",
     "escaped": " &lt;span&gt;\n     &lt;button&gt;This is a button&lt;/button&gt;\n &lt;/span&gt;"
   },
@@ -142,14 +142,14 @@ dss.parse(file, {}, (parsed) => {
 
 ## Parsers Specifics
 
-1. Only the `description` and `markup` parsers allow usage of multi-line comments.
+1. Only the `description` and `example` parsers allow usage of multi-line comments.
 1. The `state` and `param` parsers are returning an array of all the relevant annotations.
 1. If not defined, the parser tries to assume the `type` and `key` values based on the next line.
 1. The `group`, `type`, and `subtype` parsers convert the string annotation to lowercase letters.
 
 ## Modifying Parsers
 
-**DSS**, by default, includes the `name`, `description`, `state`, `markup`, `deprecated`, `deprecatedDescription`, `group`, `type`, `subtype`, `key`, `param`, and `returns` parsers of a comment block. You can add to or override these default parsers using the following:
+**DSS**, by default, includes the `name`, `description`, `state`, `example`, `deprecated`, `deprecatedDescription`, `group`, `type`, `subtype`, `key`, `param`, and `returns` parsers of a comment block. You can add to or override these default parsers using the following:
 
 ```javascript
 // Matches @link

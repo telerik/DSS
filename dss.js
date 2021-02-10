@@ -571,13 +571,13 @@ dss.parser('state', (i, line, block, file) => { // eslint-disable-line no-unused
     } ];
 });
 
-// Describe parsing markup
-dss.parser('markup', (i, line, block, file, parserName) => {
-    const markup = dss.getMultiLineContent(i, line, block, file, parserName);
+// Describe parsing example
+dss.parser('example', (i, line, block, file, parserName) => {
+    const example = dss.getMultiLineContent(i, line, block, file, parserName);
 
     return {
-        example: markup,
-        escaped: markup.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        example: example,
+        escaped: example.replace(/</g, '&lt;').replace(/>/g, '&gt;')
     };
 });
 
