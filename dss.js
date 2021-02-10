@@ -33,14 +33,18 @@ let dss = ( function() {
         _dss.parsers[ name ] = callback;
     };
 
+    // Store parsers
+    _dss.aliases = {};
+
     /**
      * Add an alias for a parser.
      *
-     * @param {String} newName - The name of the new variable.
-     * @param {String} oldName - The name of the existing parser to use.
+     * @param {String} aliasParserName - The name of the new parser.
+     * @param {String} existingParserName - The name of the existing parser.
      */
-    _dss.alias = function( newName, oldName ) {
-        _dss.parsers[ newName ] = _dss.parsers[ oldName ];
+    _dss.alias = function( aliasParserName, existingParserName ) {
+        _dss.aliases[ aliasParserName ] = existingParserName;
+        _dss.parsers[ aliasParserName ] = _dss.parsers[ existingParserName ];
     };
 
     /**
@@ -223,6 +227,10 @@ let dss = ( function() {
             let description = _dss.trim( parts.substr( i ) );
             let variable = _dss.parsers[ name ];
             let index = block.indexOf( line );
+
+            if ( _dss.aliases[name] ) {
+                name = _dss.aliases[name];
+            }
 
             line = {};
             line[ name ] = ( variable ) ? variable.apply( null, [ index, description, block, file, name ] ) : ''; // eslint-disable-line no-useless-call
@@ -632,5 +640,7 @@ dss.parser('returns', (i, line, block, file) => { // eslint-disable-line no-unus
         description: state.description
     };
 });
+
+dss.alias('return', 'returns');
 
 module.exports = dss;
