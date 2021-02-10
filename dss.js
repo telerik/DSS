@@ -403,15 +403,17 @@ let dss = ( function() {
      * @param {string} block - Parsed block.
      * @param {string} file - Parsed file.
      * @param {string} parserName - Name of the parser.
+     * @param {boolean} [includeParserLine=true] - A flag that indicates if first line should be included in the returned string.
      * @returns {string} - Result of parsing.
      */
-    _dss.getMultiLineContent = (i, line, block, file, parserName) => {
+    _dss.getMultiLineContent = (i, line, block, file, parserName, includeParserLine = true) => {
         /* eslint-disable no-param-reassign */
         // find the next instance of a parser (if there is one based on the @ symbol)
         // in order to isolate the current multi-line parser
         let nextParserIndex = block.indexOf('\n @', i + 1);
         let markupLength = (nextParserIndex > -1) ? nextParserIndex - i : block.length;
         let markup = _dss.trim(block.split('').splice(i, markupLength).join(''));
+        let parserLine = line;
         let parserMarker = '@' + parserName;
 
         markup = ((markup) => {
@@ -437,6 +439,10 @@ let dss = ( function() {
 
                 if (line.indexOf(parserMarker) !== -1) {
                     line = _dss.trim(line.replace(parserMarker, ''));
+
+                    if (!includeParserLine) {
+                        line = _dss.trim(line.replace(parserLine, ''));
+                    }
 
                     if (line.length > 0) {
                         ret.push(line);
@@ -583,9 +589,10 @@ dss.parser('state', (i, line, block, file) => { // eslint-disable-line no-unused
 
 // Describe parsing example
 dss.parser('example', (i, line, block, file, parserName) => {
-    const example = dss.getMultiLineContent(i, line, block, file, parserName);
+    const example = dss.getMultiLineContent(i, line, block, file, parserName, false);
 
     return {
+        type: (line.length) ? line.toLowerCase() : null,
         example: example,
         escaped: example.replace(/</g, '&lt;').replace(/>/g, '&gt;')
     };

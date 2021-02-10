@@ -22,6 +22,7 @@ const path = require('path');
                 assert.strictEqual(data.state[2].name, '.primary');
                 assert.strictEqual(data.state[2].description, 'Indicates button is the primary action.');
                 assert.strictEqual(data.state[3].name, '.smaller');
+                assert.strictEqual(data.example.type, null);
                 assert.strictEqual(data.example.example,
                     '   <span>\n' +
                     '     <button>This is a button</button>\n' +
@@ -43,6 +44,7 @@ const path = require('path');
 
                 assert.strictEqual(data.name, 'Button');
                 assert.strictEqual(data.description, 'Your standard form button.');
+                assert.strictEqual(data.example.type, null);
                 assert.strictEqual(data.example.example,
                     '   <span>\n' +
                     '     <button>This is a button</button>\n' +
@@ -93,6 +95,7 @@ const path = require('path');
                 assert.strictEqual(data.state[2].name, '.primary');
                 assert.strictEqual(data.state[2].description, 'Indicates button is the primary action.');
                 assert.strictEqual(data.state[3].name, '.smaller');
+                assert.strictEqual(data.example.type, 'html');
                 assert.strictEqual(data.example.example, '<button>This is a button</button>');
                 assert.strictEqual(data.example.escaped, '&lt;button&gt;This is a button&lt;/button&gt;');
                 assert.strictEqual(data.deprecated, '123.321');
@@ -165,6 +168,7 @@ const path = require('path');
             dss.parse(file, {}, (parsed) => {
                 const data = parsed.blocks[0];
 
+                assert.strictEqual(data.example[0].type, 'md');
                 assert.strictEqual(data.example[0].example,
                     ' <span>\n' +
                     '     <button>This is a button</button>\n' +
@@ -175,6 +179,8 @@ const path = require('path');
                     '     &lt;button&gt;This is a button&lt;/button&gt;\n' +
                     ' &lt;/span&gt;'
                 );
+
+                assert.strictEqual(data.example[1].type, null);
                 assert.strictEqual(data.example[1].example,
                     ' <div>\n' +
                     '     <span>This is a span</span>\n' +
