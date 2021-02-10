@@ -194,6 +194,22 @@ const path = require('path');
             });
         });
 
+        it('description without annotations are parsed', () => {
+            const file = fs.readFileSync(path.join(__dirname, `data/${ext}/description-without-annotation.scss`), 'utf8');
+
+            dss.parse(file, {}, (parsed) => {
+                const data0 = parsed.blocks[0];
+                const data1 = parsed.blocks[1];
+                const data2 = parsed.blocks[2];
+                const data3 = parsed.blocks[3];
+
+                assert.strictEqual(data0.description, 'Your standard description.');
+                assert.strictEqual(data1.description, 'Description with additional comments.');
+                assert.strictEqual(data2.description, 'Description override.');
+                assert.strictEqual(data3.description, 'Multi-line description\n ```json\n     {\n         "test": true\n     }\n ```');
+            });
+        });
+
     });
 
 });

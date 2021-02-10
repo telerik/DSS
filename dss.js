@@ -205,7 +205,7 @@ let dss = ( function() {
         let blocks = [];
         let temp = {};
         let lineNum = 0;
-        const overridableNames = [ 'key', 'type' ];
+        const overridableNames = [ 'key', 'type', 'description' ];
 
         /**
          * Parses a line.
@@ -347,11 +347,13 @@ let dss = ( function() {
                     const lineToParse = endMultiLineComment(line) ? String(linesArr[index + 1]) : line;
                     const type = _dss.getKeyType(_dss.trim(lineToParse));
                     const key = _dss.getKey(_dss.trim(lineToParse), type);
+                    const description = _dss.getDescription(_dss.trim(currentBlock));
 
                     _blocks.push( _dss.normalize( currentBlock ) );
                     _blockValues.push({
                         'type': type,
-                        'key': key
+                        'key': key,
+                        'description': description
                     });
                 }
                 insideSingleLineBlock = false;
@@ -549,6 +551,26 @@ let dss = ( function() {
         }
 
         return null;
+    };
+
+    /**
+     * Get the default description of the block that is not passed via an annotation.
+     * If description annotation is also passed, it will override the default one.
+     *
+     * @param {string} block - Block to parse.
+     * @returns - The default description if defined.
+     */
+    _dss.getDescription = (block) => {
+        let description = null;
+
+        if ( !block.startsWith('@') ) {
+            let nextParserIndex = block.indexOf('\n @');
+            let markupLength = (nextParserIndex > -1) ? nextParserIndex : block.length;
+
+            description = block.substring(0, markupLength);
+        }
+
+        return description;
     };
 
     // Return function
