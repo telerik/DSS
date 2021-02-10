@@ -214,9 +214,10 @@ let dss = ( function() {
          * @param {string} line - The line to parse.
          * @param {string} block - Parsed block.
          * @param {string} file - Parsed file.
+         * @param {number} lineIndex - Index of the line.
          * @returns {object} - Result of parsing.
          */
-        let parser = function( temp, line, block, file ) {
+        let parser = function( temp, line, block, file, lineIndex ) {
             /* eslint-disable no-param-reassign */
             let indexer = function( str, find ) {
                 return ( str.indexOf( find ) > 0 ) ? str.indexOf( find ) : false;
@@ -226,14 +227,15 @@ let dss = ( function() {
             let name = _dss.trim( parts.substr( 0, i ) );
             let description = _dss.trim( parts.substr( i ) );
             let variable = _dss.parsers[ name ];
-            let index = block.indexOf( line );
+            let restOfBlock = block.split( '\n' ).splice(lineIndex).join( '\n' );
+            let index = restOfBlock.indexOf( line );
 
             if ( _dss.aliases[name] ) {
                 name = _dss.aliases[name];
             }
 
             line = {};
-            line[ name ] = ( variable ) ? variable.apply( null, [ index, description, block, file, name ] ) : ''; // eslint-disable-line no-useless-call
+            line[ name ] = ( variable ) ? variable.apply( null, [ index, description, restOfBlock, file, name ] ) : ''; // eslint-disable-line no-useless-call
 
             if ( (overridableNames.indexOf(name) === -1) && temp[ name ] ) {
                 if ( !_dss.isArray( temp[ name ] ) ) {
@@ -374,9 +376,9 @@ let dss = ( function() {
             } ).join( '\n' );
 
             // Split block into lines
-            block.split( '\n' ).forEach( function( line ) {
+            block.split( '\n' ).forEach( (line, lineIndex) => {
                 if ( _dss.detect( line ) ) {
-                    temp = parser( temp, _dss.normalize( line ), block, lines );
+                    temp = parser( temp, _dss.normalize( line ), block, lines, lineIndex);
                 }
             });
 

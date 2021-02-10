@@ -159,6 +159,35 @@ const path = require('path');
             });
         });
 
+        it('multiple examples are correctly parsed', () => {
+            const file = fs.readFileSync(path.join(__dirname, `data/${ext}/multiple-examples.scss`), 'utf8');
+
+            dss.parse(file, {}, (parsed) => {
+                const data = parsed.blocks[0];
+
+                assert.strictEqual(data.example[0].example,
+                    ' <span>\n' +
+                    '     <button>This is a button</button>\n' +
+                    ' </span>'
+                );
+                assert.strictEqual(data.example[0].escaped,
+                    ' &lt;span&gt;\n' +
+                    '     &lt;button&gt;This is a button&lt;/button&gt;\n' +
+                    ' &lt;/span&gt;'
+                );
+                assert.strictEqual(data.example[1].example,
+                    ' <div>\n' +
+                    '     <span>This is a span</span>\n' +
+                    ' </div>'
+                );
+                assert.strictEqual(data.example[1].escaped,
+                    ' &lt;div&gt;\n' +
+                    '     &lt;span&gt;This is a span&lt;/span&gt;\n' +
+                    ' &lt;/div&gt;'
+                );
+            });
+        });
+
     });
 
 });
