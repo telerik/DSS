@@ -1,5 +1,7 @@
 # DSS
 
+This is a fork of [DSS](https://github.com/DSSORG/DSS).
+
 **DSS**, Documented Style Sheets, is a comment styleguide and parser for CSS, LESS, SASS and SCSS code.
 
 ## Generating Documentation
@@ -143,9 +145,20 @@ dss.parse(file, {}, (parsed) => {
 ## Parsers Specifics
 
 1. Only the `description` and `example` parsers allow usage of multi-line comments.
+1. If a comment block starts without an annotation, the parser sets this text as `description`. However, if a `description` annotation is available, the parser overrides the non-annotation one.
+1. If more than one `example` is provided, the parser returns an array of examples.
 1. The `state` and `param` parsers are returning an array of all the relevant annotations.
 1. If not defined, the parser tries to assume the `type` and `key` values based on the next line.
 1. The `group`, `type`, and `subtype` parsers convert the string annotation to lowercase letters.
+
+## Parser Aliases
+
+The parser aliases set their value in the `key` of the main parser in the output `JSON`.
+
+**DSS**, by default, includes the following `alias` - `parser` pairs:
+
+1. `return` - `returns`
+1. `markup` - `example`
 
 ## Modifying Parsers
 
