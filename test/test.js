@@ -210,6 +210,30 @@ const path = require('path');
             });
         });
 
+        it('aliases are correctly converted to parsers', () => {
+            const file = fs.readFileSync(path.join(__dirname, `data/${ext}/aliases.scss`), 'utf8');
+
+            dss.parse(file, {}, (parsed) => {
+                const data = parsed.blocks[0];
+
+                assert.strictEqual(data.example.type, 'md');
+                assert.strictEqual(data.example.example,
+                    ' <span>\n' +
+                    '     <button>This is a button</button>\n' +
+                    ' </span>'
+                );
+                assert.strictEqual(data.example.escaped,
+                    ' &lt;span&gt;\n' +
+                    '     &lt;button&gt;This is a button&lt;/button&gt;\n' +
+                    ' &lt;/span&gt;'
+                );
+
+                assert.strictEqual(data.returns.type, '{number}');
+                assert.strictEqual(data.returns.name, null);
+                assert.strictEqual(data.returns.description, 'return description');
+            });
+        });
+
     });
 
 });

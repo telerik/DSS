@@ -33,7 +33,7 @@ let dss = ( function() {
         _dss.parsers[ name ] = callback;
     };
 
-    // Store parsers
+    // Store aliases
     _dss.aliases = {};
 
     /**
@@ -225,6 +225,7 @@ let dss = ( function() {
             let parts = line.replace( /[^@]*@/, '' );
             let i = indexer( parts, ' ' ) || indexer( parts, '\n' ) || indexer( parts, '\r' ) || parts.length;
             let name = _dss.trim( parts.substr( 0, i ) );
+            let annotationName = name;
             let description = _dss.trim( parts.substr( i ) );
             let variable = _dss.parsers[ name ];
             let restOfBlock = block.split( '\n' ).splice(lineIndex).join( '\n' );
@@ -235,7 +236,7 @@ let dss = ( function() {
             }
 
             line = {};
-            line[ name ] = ( variable ) ? variable.apply( null, [ index, description, restOfBlock, file, name ] ) : ''; // eslint-disable-line no-useless-call
+            line[ name ] = ( variable ) ? variable.apply( null, [ index, description, restOfBlock, file, annotationName ] ) : ''; // eslint-disable-line no-useless-call
 
             if ( (overridableNames.indexOf(name) === -1) && temp[ name ] ) {
                 if ( !_dss.isArray( temp[ name ] ) ) {
@@ -672,6 +673,11 @@ dss.parser('returns', (i, line, block, file) => { // eslint-disable-line no-unus
     };
 });
 
+// Aliases
+
 dss.alias('return', 'returns');
+
+dss.alias('markup', 'example');
+
 
 module.exports = dss;
