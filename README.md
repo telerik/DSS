@@ -80,7 +80,7 @@ const file = fs.readFileSync('styles.scss');
 
 // Run DSS Parser
 dss.parse(file, {}, (parsed) => {
-  console.log(parsed.blocks);
+    console.log(parsed.blocks);
 });
 ```
 
@@ -88,57 +88,57 @@ dss.parse(file, {}, (parsed) => {
 
 ```json
 [{
-  "name": "Button",
-  "description": "Your standard form button.",
-  "state": [
-    {
-      "name": ":hover",
-      "escaped": "pseudo-class-hover",
-      "description": "Highlights when hovering."
+    "name": "Button",
+    "description": "Your standard form button.",
+    "state": [
+        {
+            "name": ":hover",
+            "escaped": "pseudo-class-hover",
+            "description": "Highlights when hovering."
+        },
+        {
+            "name": ":disabled",
+            "escaped": "pseudo-class-disabled",
+            "description": "Dims the button when disabled."
+        },
+        {
+            "name": ".primary",
+            "escaped": "primary",
+            "description": "Indicates button is the primary action."
+        },
+        {
+            "name": ".smaller",
+            "escaped": "smaller",
+            "description": "A smaller button."
+        }
+    ],
+    "example": {
+        "example": " <span>\n     <button>This is a button</button>\n </span>",
+        "escaped": " &lt;span&gt;\n     &lt;button&gt;This is a button&lt;/button&gt;\n &lt;/span&gt;"
     },
-    {
-      "name": ":disabled",
-      "escaped": "pseudo-class-disabled",
-      "description": "Dims the button when disabled."
-    },
-    {
-      "name": ".primary",
-      "escaped": "primary",
-      "description": "Indicates button is the primary action."
-    },
-    {
-      "name": ".smaller",
-      "escaped": "smaller",
-      "description": "A smaller button."
+    "deprecated": "123.321",
+    "deprecatedDescription": "This is deprecated.",
+    "group": "buttons",
+    "type": "color",
+    "subtype": "text-color",
+    "key": "$button-bg",
+    "param": [
+        {
+            "type": "{string}",
+            "name": "par1",
+            "description": "ParmOne description."
+        },
+        {
+            "type": "{function}",
+            "name": "par2",
+            "description": "ParmTwo description."
+        }
+    ],
+    "returns": {
+        "type": "{number}",
+        "name": null,
+        "description": "Return description."
     }
-  ],
-  "example": {
-    "example": " <span>\n     <button>This is a button</button>\n </span>",
-    "escaped": " &lt;span&gt;\n     &lt;button&gt;This is a button&lt;/button&gt;\n &lt;/span&gt;"
-  },
-  "deprecated": "123.321",
-  "deprecatedDescription": "This is deprecated.",
-  "group": "buttons",
-  "type": "color",
-  "subtype": "text-color",
-  "key": "$button-bg",
-  "param": [
-    {
-      "type": "{string}",
-      "name": "par1",
-      "description": "ParmOne description."
-    },
-    {
-      "type": "{function}",
-      "name": "par2",
-      "description": "ParmTwo description."
-    }
-  ],
-  "returns": {
-    "type": "{number}",
-    "name": null,
-    "description": "Return description."
-  }
 }]
 ```
 
@@ -167,16 +167,16 @@ The parser aliases set their value in the `key` of the main parser in the output
 ```javascript
 // Matches @link
 dss.parser('link', (i, line, block, file) => {
-  // Replace link with HTML wrapped version
-  const exp = /(b(https?|ftp|file)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
+    // Replace link with HTML wrapped version
+    const exp = /(b(https?|ftp|file)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
 
-  return line.replace(exp, "<a href='$1'>$1</a>");
+    return line.replace(exp, "<a href='$1'>$1</a>");
 });
 ```
 
 ```javascript
 // Matches @version
 dss.parser('version', (i, line, block, file) => {
-  return line;
+    return line;
 });
 ```
