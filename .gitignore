@@ -4,12 +4,13 @@ node_modules/
 dist/
 modules/
 
+# vs code
+.vscode/
+!.vscode/launch.json
+
 # Log files
 npm-debug.log
 debug.log
 
 # System files
 .DS_Store
-
-# Lock files
-package-lock.json
