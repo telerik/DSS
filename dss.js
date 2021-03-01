@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const _has = require('lodash.has');
 
 // DSS Object
 let dss = ( function() {
@@ -107,7 +107,7 @@ let dss = ( function() {
             }
         } else {
             for ( let key in obj ) {
-                if ( _.has( obj, key ) ) {
+                if ( _has( obj, key ) ) {
                     if ( iterator.call( context, obj[ key ], key, obj ) === {} ) {
                         return;
                     }
