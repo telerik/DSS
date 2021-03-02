@@ -1,7 +1,7 @@
 {
   "name": "@progress/dss",
   "description": "Documented Style Sheets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/telerik/dss",
   "author": "Progress",
   "license": "MIT",

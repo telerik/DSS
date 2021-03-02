@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/telerik/dss/compare/v1.0.0...v1.0.1) (2021-03-02)
+
+
+### Bug Fixes
+
+* reduce bundle size by using only lodash.has instead of full lodash ([a81f1db](https://github.com/telerik/dss/commit/a81f1dbca64cc045d236e0611bf309d92bac1826))
+* update license ([5fce8e9](https://github.com/telerik/dss/commit/5fce8e96144fe7aa44338b134080ab51eeceebaf))
+
 # 1.0.0 (2021-03-01)
 
 
