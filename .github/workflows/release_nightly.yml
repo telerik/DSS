@@ -13,18 +13,32 @@ on:
   workflow_dispatch:
 
 jobs:
-
   release-nightly:
-
     runs-on: ubuntu-latest
 
+    permissions:
+        id-token: write # Required by Akeyless
+        contents: read
+        packages: read
+
     steps:
+      - name: Import Secrets
+        id: import-secrets
+        uses: LanceMcCarthy/akeyless-action@v3
+        with:
+          access-id: ${{ secrets.GH_AKEYLESS_ACCESS_ID }}
+          static-secrets: |
+            {
+              "/WebComponents/prod/tokens/GH_TOKEN": "GH_TOKEN",
+              "/WebComponents/prod/tokens/PROGRESS_NPM_REGISTRY_TOKEN": "NPM_TOKEN"
+            }
+          export-secrets-to-environment: false
 
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
           ref: develop
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ steps.import-secrets.outputs.GH_TOKEN }}
 
       - name: Setup git
         run: |
@@ -48,5 +62,5 @@ jobs:
       - name: Publish
         run: npx semantic-release --nightly
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.import-secrets.outputs.GH_TOKEN }}
+          NPM_TOKEN: ${{ steps.import-secrets.outputs.NPM_TOKEN }}
