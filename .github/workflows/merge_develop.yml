@@ -15,21 +15,21 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-        id-token: write # Required by Akeyless
-        contents: read
-        packages: read
+      id-token: write # Required by Akeyless
+      contents: read
+      packages: read
 
     steps:
       - name: Import Secrets
         id: import-secrets
-        uses: LanceMcCarthy/akeyless-action@v3
+        uses: LanceMcCarthy/akeyless-action@v5
         with:
           access-id: ${{ secrets.GH_AKEYLESS_ACCESS_ID }}
           static-secrets: '{ "/WebComponents/prod/tokens/GH_TOKEN": "GH_TOKEN" }'
           export-secrets-to-environment: false
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: master
           token: ${{ steps.import-secrets.outputs.GH_TOKEN }}
