@@ -10,35 +10,32 @@ env:
 on:
   schedule:
     # Run at midnight every working day
-    - cron: '0 0 * * Mon-Fri'
+    - cron: "0 0 * * Mon-Fri"
   workflow_dispatch:
 
 jobs:
-
   # Run only if current commit hash is differente prom previous run commit hash
 
   ci-nightly:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        node-version: [12.x, 14.x, 18.x, 20.x, 22.x]
 
     steps:
-
       - name: Checkout branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: develop
 
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Setup node cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
